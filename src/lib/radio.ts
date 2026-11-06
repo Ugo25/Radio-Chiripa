@@ -35,7 +35,7 @@ export type Cancion = {
 };
 
 export const TEXTOS = {
-  sinCancionTitulo: "Chiripa Radio",
+  sinCancionTitulo: "Radio Chiripa",
   sinCancionArtista: "Encendiendo la señal…",
   senalNoDisponible: "Señal no disponible en este momento; vuelve en cuanto se restablezca.",
   graciasTitulo: "Gracias por escuchar",

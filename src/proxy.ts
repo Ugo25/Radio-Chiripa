@@ -259,7 +259,7 @@ export async function proxy(req: NextRequest) {
     !refererPermitido(req)
   ) {
     return NextResponse.json(
-      { error: "Este contenido solo suena desde Chiripa Radio." },
+      { error: "Este contenido solo suena desde Radio Chiripa." },
       { status: 403, headers: { "Cache-Control": "no-store" } },
     );
   }

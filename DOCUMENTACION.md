@@ -1,6 +1,6 @@
-# Chiripa Radio — cómo funciona la web
+# Radio Chiripa — cómo funciona la web
 
-Chiripa Radio es la web del festival **Chiripa 2026** (8 de noviembre de 2026, Shekinah Beach Club, Mazatlán). Tiene dos caras en un solo proyecto Next.js 16:
+ Radio Chiripa es la web del festival **Chiripa 2026** (8 de noviembre de 2026, Shekinah Beach Club, Mazatlán). Tiene dos caras en un solo proyecto Next.js 16:
 
 - **La radio pública** (`/`): una radio en vivo que transmite la biblioteca de música propia de la casa, en bucle, sincronizada contra el reloj del mundo. Todos los oyentes escuchan la misma canción en el mismo minuto, como una radio de verdad.
 - **El gestor** (`/gestor`): el panel privado donde el dueño sube canciones, arma álbumes, pega letras y administra cuentas. Se abre con un PIN maestro o con cuentas propias (dueño/colaborador).

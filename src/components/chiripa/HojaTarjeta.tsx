@@ -221,7 +221,7 @@ export function HojaTarjeta({
       }
       ctx.restore();
       ctx.fillStyle = CREMA;
-      textoAjustado(ctx, cancion?.titulo ?? "Chiripa Radio", 234, 1052, 770, 36, familia, 700);
+      textoAjustado(ctx, cancion?.titulo ?? "Radio Chiripa", 234, 1052, 770, 36, familia, 700);
       ctx.fillStyle = "rgba(242, 228, 198, 0.7)";
       textoAjustado(
         ctx,
@@ -255,7 +255,7 @@ export function HojaTarjeta({
 
       canvas.setAttribute(
         "aria-label",
-        `${fragmento} · ${cancion?.titulo ?? "Chiripa Radio"} · Radio Chiripa`,
+        `${fragmento} · ${cancion?.titulo ?? "Radio Chiripa"} · Radio Chiripa`,
       );
 
       const blob = await new Promise<Blob | null>((r) => canvas.toBlob(r, "image/png"));
@@ -297,7 +297,7 @@ export function HojaTarjeta({
     if (!archivo) return;
     const datos = {
       files: [archivo],
-      title: `${cancion?.titulo ?? "Chiripa Radio"} · Radio Chiripa`,
+      title: `${cancion?.titulo ?? "Radio Chiripa"} · Radio Chiripa`,
       text: `Radio Chiripa. ${sitioActual()}`,
     };
     if (

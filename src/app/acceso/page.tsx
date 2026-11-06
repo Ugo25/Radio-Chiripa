@@ -25,7 +25,7 @@ export default function PaginaAcceso() {
 
   return (
     <PuertaBiblioteca
-      titulo="Panel de Chiripa Radio"
+      titulo="Panel de Radio Chiripa"
       subtitulo="El control de toda la radio: biblioteca, álbumes, letras y cuentas. Entra con el PIN del dueño o con tu cuenta."
       alEntrar={() => window.location.replace("/gestor")}
     />

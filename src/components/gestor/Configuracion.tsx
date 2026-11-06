@@ -766,7 +766,7 @@ export function Configuracion({
         </h2>
         <div className="panel-config-acerca">
           <p>
-            <strong>Panel de Chiripa Radio</strong>
+            <strong>Panel de Radio Chiripa</strong>
             <span className="panel-pill panel-pill-acento">
               v{config?.version ?? "…"}
             </span>

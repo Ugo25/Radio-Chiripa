@@ -60,7 +60,7 @@ export function ReproductorRadio({
 
   return (
     <div className="chiripa-wrapper">
-      <section className="chiripa-tarjeta" aria-label="Chiripa Radio">
+      <section className="chiripa-tarjeta" aria-label="Radio Chiripa">
         <div className={`chiripa-portada ${sonando ? "sonando" : "en-pausa"}`}>
           <img
             src={portada}

@@ -136,7 +136,7 @@ export function HojaHistoria({
     ctx.fillStyle = "rgba(242, 228, 198, 0.75)";
     textoAjustado(
       ctx,
-      alAire ? cancion!.artista || "Chiripa Radio" : "Chiripa Radio",
+      alAire ? cancion!.artista || "Radio Chiripa" : "Radio Chiripa",
       120,
       1580,
       840,
@@ -248,7 +248,7 @@ export function HojaHistoria({
           role="img"
           aria-label={
             cancion && cancion.titulo
-              ? `Historia de Instagram: Ahora suena ${cancion.titulo}${cancion.artista ? ` de ${cancion.artista}` : ""} en Chiripa Radio`
+              ? `Historia de Instagram: Ahora suena ${cancion.titulo}${cancion.artista ? ` de ${cancion.artista}` : ""} en Radio Chiripa`
               : `Historia de Instagram del Festival Chiripa: ${FESTIVAL.fechas}, ${FESTIVAL.lugar}, ${FESTIVAL.ciudad}`
           }
         />
