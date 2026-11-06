@@ -1,0 +1,105 @@
+# ============================================================================
+# Caddyfile.produccion — plantilla endurecida para el dominio real de la radio
+# ============================================================================
+# Cómo se usa (distinto del Caddyfile del entorno de pruebas, que NO se toca):
+#
+#   1. Copia este archivo a tu servidor y pon tu dominio donde dice
+#      chiripa.radio (buscar y reemplazar).
+#   2. Apunta el DNS del dominio al servidor y abre 80 y 443.
+#   3. Arranca: caddy run --config Caddyfile.produccion
+#
+# Caddy gestiona solo los certificados (Let's Encrypt, renovación y
+# redirección HTTP → HTTPS incluidas). Lo que esta plantilla añade:
+# TLS moderno, cabeceras al borde, compresión, candado de iframes,
+# anti-hotlinking del audio y tope de tamaño para subidas.
+# ============================================================================
+
+chiripa.radio {
+
+	# --- TLS: protocolos modernos, nada de versiones jubiladas ------
+	tls {
+		protocols tls1.2 tls1.3
+	}
+
+	# --- Compresión: zstd para navegadores nuevos, gzip de respaldo -
+	encode zstd gzip
+
+	# --- Cabeceras de seguridad al borde -----------------------------
+	# (Next.js ya manda las suyas; duplicarlas aquí hace que apliquen
+	# aunque algún día sirvas estáticos directamente desde Caddy.)
+	header {
+		# Nadie incrusta la web en un iframe ajeno. Si algún socio
+		# necesita embeberte, cambia a Content-Security-Policy con
+		# frame-ancestors y lista blanca de dominios.
+		X-Frame-Options SAMEORIGIN
+
+		# El navegador no adivina tipos de contenido (anti-sniffing).
+		X-Content-Type-Options nosniff
+
+		# Solo manda la URL completa como Referer dentro de tu sitio.
+		Referrer-Policy strict-origin-when-cross-origin
+
+		# Sin cámaras, micrófonos ni localización para nadie.
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+		# HTTPS obligatorio durante 2 años para el dominio y subdominios.
+		# Añade "preload" solo cuando estés seguro (ver la guía).
+		Strict-Transport-Security "max-age=63072000; includeSubDomains"
+
+		# Sin propaganda del servidor: Caddy ya oculta su versión,
+		# y esto quita hasta el nombre.
+		-Server
+	}
+
+	# --- Anti-hotlinking del audio al borde --------------------------
+	# Bloquea los reproductores de páginas ajenas que apuntan directo a
+	# tus archivos. La condición permite el Referer vacío (apps,
+	# reproductores de escritorio, navegadores con privacidad estricta)
+	# y solo deja pasar el que viene de tu propio dominio.
+	#
+	# Es la misma lógica que BLOQUEAR_HOTLINK=1 en el proxy de Next,
+	# pero frenándolo antes de que llegue a Node. Usa una u otra
+	# (o ambas: la de Caddy es la más barata).
+	@audio_ajeno {
+		path /api/biblioteca/audio/* /api/biblioteca/portada/*
+		expression header('Referer') != '' && !header('Referer').startsWith('https://chiripa.radio')
+	}
+	respond @audio_ajeno "Este contenido solo suena desde Chiripa Radio." 403
+
+	# --- Tope de tamaño para subidas --------------------------------
+	# Un mp3 de calidad llega a 15-20 MB; 200 MB deja subir cualquier
+	# álbum completo sin abrir la puerta a cuerpos infinitos.
+	request_body {
+		max_size 200MB
+	}
+
+	# --- Rate limiting (opcional, requiere plugin) ------------------
+	# El Caddy oficial NO trae limitador: hay que compilarlo con el
+	# plugin (xcaddy build --with github.com/mholt/caddy-ratelimit).
+	# Si lo tienes, este bloque limita a 240 pedidos por minuto e IP:
+	#
+	#   rate_limit {
+	#       zone lecturas {
+	#           key    {remote_host}
+	#           events 240
+	#           window 1m
+	#       }
+	#   }
+
+	# --- La radio misma ---------------------------------------------
+	reverse_proxy localhost:3000 {
+		header_up Host {host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Real-IP {remote_host}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Redirección explícita HTTP → HTTPS (Caddy ya la crea sola al escuchar el
+# dominio en :443; dejarla escrita la documenta y permite añadir cabeceras
+# a la respuesta del 301 si algún día hace falta).
+# ----------------------------------------------------------------------------
+http://chiripa.radio {
+	redir https://chiripa.radio{uri} permanent
+}
