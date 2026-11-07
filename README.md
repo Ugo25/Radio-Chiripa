@@ -1,6 +1,6 @@
 # Radio Chiripa
 
-La web del **Festival Chiripa 2026** (7 de noviembre de 2026 · Shekinah Beach Club, Mazatlán): una radio en vivo que transmite la música de la casa, sincronizada contra el reloj del mundo, más el panel privado para administrarla.
+La web del **Festival Chiripa** : una radio en vivo que transmite la música de la casa, sincronizada contra el reloj del mundo, más el panel privado para administrarla.
 
 Construido con **Next.js 16** y **React 19**. Sin base de datos: todo el estado (canciones, letras, cuentas, señal) vive en archivos JSON dentro de `media/` — respaldar la radio es copiar una carpeta.
 
