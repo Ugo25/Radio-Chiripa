@@ -153,9 +153,13 @@ function refererPermitido(req: NextRequest): boolean {
 let cacheSecreto: Uint8Array<ArrayBuffer> | null = null;
 let cacheLeido = false;
 
-async function leerSecreto(): Promise<Uint8Array<ArrayBuffer> | null> {
-  if (cacheLeido) return cacheSecreto;
+// forzar=true relee media/llave.json aunque ya haya caché. Se usa cuando un
+// token no cuadra: cambiar el PIN rota el secreto (llave-servidor.ts) y sin
+// esto la caché quedaría vieja hasta reiniciar — el bug del loop del panel.
+async function leerSecreto(forzar = false): Promise<Uint8Array<ArrayBuffer> | null> {
+  if (cacheLeido && !forzar) return cacheSecreto;
   cacheLeido = true;
+  cacheSecreto = null;
   try {
     const fs = await import("node:fs");
     const path = await import("node:path");
@@ -187,22 +191,30 @@ async function tokenFirmadoValido(token: string): Promise<boolean> {
   const partes = token.split(".");
   if (partes.length !== 3 || partes[0] !== "v1") return false;
   try {
+    const cuadra = async (secreto: Uint8Array<ArrayBuffer>): Promise<boolean> => {
+      const llave = await crypto.subtle.importKey(
+        "raw",
+        secreto,
+        { name: "HMAC", hash: "SHA-256" },
+        false,
+        ["verify"],
+      );
+      const firma = bytesDeB64url(partes[2]);
+      const datos = new TextEncoder().encode(`v1.${partes[1]}`);
+      if (!(await crypto.subtle.verify("HMAC", llave, firma, datos))) return false;
+      const payload = JSON.parse(
+        new TextDecoder().decode(bytesDeB64url(partes[1])),
+      ) as { exp?: number };
+      return typeof payload.exp === "number" && Date.now() < payload.exp;
+    };
     const secreto = await leerSecreto();
-    if (!secreto) return false;
-    const llave = await crypto.subtle.importKey(
-      "raw",
-      secreto,
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["verify"],
-    );
-    const firma = bytesDeB64url(partes[2]);
-    const datos = new TextEncoder().encode(`v1.${partes[1]}`);
-    if (!(await crypto.subtle.verify("HMAC", llave, firma, datos))) return false;
-    const payload = JSON.parse(
-      new TextDecoder().decode(bytesDeB64url(partes[1])),
-    ) as { exp?: number };
-    return typeof payload.exp === "number" && Date.now() < payload.exp;
+    if (secreto && (await cuadra(secreto))) return true;
+    // La firma no cuadra (o aún no hay secreto en caché): el secreto pudo
+    // rotar — p. ej. al cambiar el PIN — así que se relee llave.json una vez
+    // y se reintenta antes de rechazar. Sin esto el panel entra en loop
+    // (PIN correcto → 401 → puerta) hasta reiniciar el proceso.
+    const fresco = await leerSecreto(true);
+    return !!fresco && (await cuadra(fresco));
   } catch {
     return false;
   }
