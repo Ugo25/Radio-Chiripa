@@ -6,9 +6,9 @@ export const FESTIVAL = {
   edicion: "Edición 2026",
   fase: "Fase 1",
 
-  fechas: "8 NOV 2026",
-  fechaCorta: "8 NOV",
-  fechaISO: "2026-11-08T19:00:00",
+  fechas: "7 NOV 2026",
+  fechaCorta: "7 NOV",
+  fechaISO: "2026-11-07T19:00:00",
 
   lugar: "Shekinah Beach Club",
   direccion: "Av Camarón Sábalo 702, Sábalo Country, 82100 Mazatlán, Sin.",
@@ -47,7 +47,7 @@ export const SOBRE = {
 } as const;
 
 export const MENSAJE_COMPARTIR =
-  "Chiripa Festival De Música y Arte — 8 NOV 2026 · Shekinah Beach Club, Mazatlán. Boletos Fase 1 en Passline.";
+  "Chiripa Festival De Música y Arte — 7 NOV 2026 · Shekinah Beach Club, Mazatlán. Boletos Fase 1 en Passline.";
 
 export function sitioActual(): string {
   if (FESTIVAL.sitioUrl) return FESTIVAL.sitioUrl;

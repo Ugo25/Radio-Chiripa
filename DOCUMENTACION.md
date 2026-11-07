@@ -1,6 +1,6 @@
 # Radio Chiripa — cómo funciona la web
 
- Radio Chiripa es la web del festival **Chiripa 2026** (8 de noviembre de 2026, Shekinah Beach Club, Mazatlán). Tiene dos caras en un solo proyecto Next.js 16:
+ Radio Chiripa es la web del festival **Chiripa 2026** (7 de noviembre de 2026, Shekinah Beach Club, Mazatlán). Tiene dos caras en un solo proyecto Next.js 16:
 
 - **La radio pública** (`/`): una radio en vivo que transmite la biblioteca de música propia de la casa, en bucle, sincronizada contra el reloj del mundo. Todos los oyentes escuchan la misma canción en el mismo minuto, como una radio de verdad.
 - **El gestor** (`/gestor`): el panel privado donde el dueño sube canciones, arma álbumes, pega letras y administra cuentas. Se abre con un PIN maestro o con cuentas propias (dueño/colaborador).
@@ -320,7 +320,7 @@ Los hooks del cliente (sección 2): `RADIO_CONFIG` (`apiBase`, `oyentesCadaMs: 3
 
 ### `src/lib/festival.ts`
 
-La configuración editorial del festival, toda `as const`: `FESTIVAL` (título "Chiripa 2026", fase, fechas "8 NOV 2026", `fechaISO`, lugar "Shekinah Beach Club", dirección, Instagram `@chiiiripa`, TikTok, `passlineUrl` de la venta), `CARTEL` (2 titulares + 4 artistas), `CARTEL_IMAGEN`, `SOBRE` (párrafos) y `sitioActual()` (la URL propia o `window.location.origin`). Un cambio aquí actualiza tarjeta, hojas, historia y mensaje para compartir. `sitioUrl` vacía a propósito: se comparte la URL de la propia página.
+La configuración editorial del festival, toda `as const`: `FESTIVAL` (título "Chiripa 2026", fase, fechas "7 NOV 2026", `fechaISO`, lugar "Shekinah Beach Club", dirección, Instagram `@chiiiripa`, TikTok, `passlineUrl` de la venta), `CARTEL` (2 titulares + 4 artistas), `CARTEL_IMAGEN`, `SOBRE` (párrafos) y `sitioActual()` (la URL propia o `window.location.origin`). Un cambio aquí actualiza tarjeta, hojas, historia y mensaje para compartir. `sitioUrl` vacía a propósito: se comparte la URL de la propia página.
 
 ### `src/lib/fuentes.ts`
 
